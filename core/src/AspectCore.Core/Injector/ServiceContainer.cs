@@ -73,6 +73,9 @@ namespace AspectCore.Injector
             Singletons.AddInstance<IAspectConfiguration>(_configuration);
             if (!Contains(typeof(ITransientServiceAccessor<>)))
                 Singletons.AddType(typeof(ITransientServiceAccessor<>), typeof(TransientServiceAccessor<>));
+            
+            //add service resolve callbacks
+            Scopeds.AddType<IServiceResolveCallback, PropertyInjectorCallback>();
 
             //add DynamicProxy services   
             Singletons.AddType<IInterceptorSelector, ConfigureInterceptorSelector>();
@@ -96,6 +99,8 @@ namespace AspectCore.Injector
                 Scopeds.AddType<IParameterInterceptorSelector, ParameterInterceptorSelector>();
             if (!Contains(typeof(IAspectCachingProvider)))
                 Singletons.AddType<IAspectCachingProvider, AspectCachingProvider>();
+            if (!Contains(typeof(IAspectExceptionWrapper)))
+                Singletons.AddType<IAspectExceptionWrapper, AspectExceptionWrapper>();
         }
 
         public int Count => _collection.Count;
